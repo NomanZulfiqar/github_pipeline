@@ -33,17 +33,20 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Terraform Init
-      run: terraform init
+    - name: Verify AWS Credentials
+      run: |
+        aws sts get-caller-identity
+        echo "AWS Credentials Verification Complete"
 
-    - name: Terraform Format
-      run: terraform fmt -check
+    - name: Terraform Init
+      run: terraform init -input=false
+      
+    - name: Terraform Validate
+      run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan
-
+      run: terraform plan -input=false
+      
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
-
-
+      run: terraform apply -auto-approve -input=false
