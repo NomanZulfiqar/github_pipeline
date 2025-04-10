@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  issues: write    # Add permission to create issues
+  pull-requests: write
+
 jobs:
   terraform-apply:
     name: 'Terraform Apply'
@@ -34,8 +39,8 @@ jobs:
     - name: Manual Approval
       uses: trstringer/manual-approval@v1
       with:
-        secret: ${{ github.token }}
-        approvers: ${{ github.actor }}
+        secret: ${{ secrets.GITHUB_TOKEN }}  # Changed from github.token
+        approvers: NomanZulfiqar    # Your GitHub username
         minimum-approvals: 1
         issue-title: "Approve Terraform Apply?"
         issue-body: |
@@ -46,4 +51,3 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
-
