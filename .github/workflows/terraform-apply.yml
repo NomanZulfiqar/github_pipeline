@@ -2,25 +2,20 @@ name: 'Terraform Apply'
 
 on:
   push:
-    branches: [ "main" ]
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
+    branches:
+      - main
 
 jobs:
   terraform-apply:
     name: 'Terraform Apply'
     runs-on: ubuntu-latest
-    environment: production  # This enables required approvals
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: '1.5.0'
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -36,33 +31,19 @@ jobs:
       id: plan
       run: terraform plan -no-color -input=false
 
-    - name: Terraform Plan Status
-      if: steps.plan.outcome == 'failure'
-      run: exit 1
-
     - name: Manual Approval
       uses: trstringer/manual-approval@v1
       with:
         secret: ${{ github.token }}
-        approvers: NomanZulfiqar  # Replace with your GitHub username
+        approvers: ${{ github.actor }}
         minimum-approvals: 1
-        issue-title: "Terraform Apply Approval Required"
-        issue-body: "Please review the Terraform plan and approve the apply."
-        exclude-workflow-initiator-as-approver: false
+        issue-title: "Approve Terraform Apply?"
+        issue-body: |
+          Terraform Plan has completed. Do you want to apply these changes?
+          
+          Initiated by: @${{ github.actor }}
+          Branch: ${{ github.ref }}
 
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
-
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: release-${{ github.sha }}
-        name: Infrastructure Update ${{ github.sha }}
-        body: |
-          Infrastructure updated via Terraform
-          Commit: ${{ github.sha }}
-          Workflow: ${{ github.workflow }}
-          Time: ${{ github.event.head_commit.timestamp }}
-        draft: false
-        prerelease: false
 
