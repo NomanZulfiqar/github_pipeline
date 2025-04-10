@@ -8,11 +8,11 @@ module "ec2_instance" {
 
   name = "my-ec2-instance"
 
-  instance_type          = "t3a.micro"
-  ami                    = "ami-0c7217cdde317cfec"  # Amazon Linux 2023 AMI in us-east-1
-  monitoring            = true
-  vpc_security_group_ids = ["sg-054279651426b29ad"]  # Replace with your security group ID
-  subnet_id             = "subnet-0daa08c7c1d6ee434"  # Replace with your subnet ID
+  instance_type          = "t3.micro"
+  ami                    = "ami-0c7217cdde317cfec" # Amazon Linux 2023 AMI in us-east-1
+  monitoring             = true
+  vpc_security_group_ids = ["sg-054279651426b29ad"]   # Replace with your security group ID
+  subnet_id              = "subnet-0daa08c7c1d6ee434" # Replace with your subnet ID
 
   tags = {
     Environment = "Development"
