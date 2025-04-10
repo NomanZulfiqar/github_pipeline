@@ -15,9 +15,17 @@ variable "project" {
   default     = "RocketChat"
 }
 
-# VPC Data Source
+# Get default VPC
 data "aws_vpc" "default" {
   default = true
+}
+
+# Get subnet from the default VPC
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
 }
 
 # Security group for Rocket.Chat
@@ -27,7 +35,7 @@ resource "aws_security_group" "rocket_chat_sg" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    from_port   = 3000 # Rocket.Chat default port
+    from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
@@ -38,7 +46,7 @@ resource "aws_security_group" "rocket_chat_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # TODO: Restrict to your IP
+    cidr_blocks = ["0.0.0.0/0"]
     description = "SSH access"
   }
 
@@ -83,7 +91,7 @@ module "ec2_instance" {
   ami                    = data.aws_ami.amazon_linux_2.id
   monitoring             = false
   vpc_security_group_ids = [aws_security_group.rocket_chat_sg.id]
-  subnet_id              = "subnet-0df4dd8e5ecb485b1" # TODO: Use data source or variable
+  subnet_id              = data.aws_subnets.default.ids[0] # Using first available subnet
 
   root_block_device = [{
     volume_size           = 8
