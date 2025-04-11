@@ -8,7 +8,7 @@ resource "aws_security_group" "rocket_chat_sg" {
   description = "Security group for Rocket.Chat server"
 
   ingress {
-    from_port   = 3000  # Rocket.Chat default port
+    from_port   = 3000 # Rocket.Chat default port
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
@@ -18,7 +18,7 @@ resource "aws_security_group" "rocket_chat_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Consider restricting to your IP
+    cidr_blocks = ["0.0.0.0/0"] # Consider restricting to your IP
   }
 
   egress {
@@ -35,14 +35,14 @@ module "ec2_instance" {
 
   name = "rocket-chat-server"
 
-  instance_type          = "t3.micro"  # Free tier eligible
+  instance_type          = "t3.micro" # Free tier eligible
   ami                    = "ami-0c7217cdde317cfec"
-  monitoring             = false        # Disabled to reduce costs
+  monitoring             = false # Disabled to reduce costs
   vpc_security_group_ids = [aws_security_group.rocket_chat_sg.id]
   subnet_id              = "subnet-0daa08c7c1d6ee434"
 
   root_block_device = [{
-    volume_size = 8    # Minimum required, stays within free tier
+    volume_size = 8 # Minimum required, stays within free tier
     volume_type = "gp3"
   }]
 
