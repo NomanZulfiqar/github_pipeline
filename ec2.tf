@@ -35,7 +35,7 @@ module "ec2_instance" {
 
   name = "rocket-chat-server"
 
-  instance_type          = "t2.micro"  # Free tier eligible
+  instance_type          = "t3.micro"  # Free tier eligible
   ami                    = "ami-0c7217cdde317cfec"
   monitoring             = false        # Disabled to reduce costs
   vpc_security_group_ids = [aws_security_group.rocket_chat_sg.id]
