@@ -25,7 +25,7 @@ resource "aws_internet_gateway" "main" {
 # Public Subnet
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block             = "10.0.1.0/24"
+  cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
@@ -77,7 +77,7 @@ resource "aws_security_group" "rocket_chat_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Consider restricting to your IP
+    cidr_blocks = ["0.0.0.0/0"] # Consider restricting to your IP
   }
 
   egress {
@@ -101,10 +101,10 @@ module "ec2_instance" {
 
   name = "rocket-chat-server"
 
-  ami                    = "ami-053b0d53c279acc90"  # Ubuntu 22.04
-  instance_type          = "t3.small"
-  key_name              = "rocketchat"              # Replace with your key pair name
-  
+  ami           = "ami-053b0d53c279acc90" # Ubuntu 22.04
+  instance_type = "t3.small"
+  key_name      = "rocketchat" # Replace with your key pair name
+
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.rocket_chat_sg.id]
 

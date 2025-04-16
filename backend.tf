@@ -4,8 +4,8 @@
 
 terraform {
   backend "s3" {
-    region         = "us-east-1"                                      # Terraform Backend AWS regions (Need to update the key to the account name)
-    key            = "ec2/terraform.tfstate"                          # S3 bucket directoy structure for terraform state file to store
+    region         = "us-east-1"                                              # Terraform Backend AWS regions (Need to update the key to the account name)
+    key            = "ec2/terraform.tfstate"                                  # S3 bucket directoy structure for terraform state file to store
     bucket         = "noman-rocket-zulfiqar-terraform-backend-us-east-1"      # Update S3 bucket name output from terraform backend script
     dynamodb_table = "noman-rocket-zulfiqar-terraform-backend-us-east-1.lock" # Update DynamoDB name output from terraform backend script
     encrypt        = true
@@ -15,10 +15,10 @@ terraform {
 
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = "2.32.0"
     }
     helm = {
