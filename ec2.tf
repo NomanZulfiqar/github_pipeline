@@ -102,7 +102,7 @@ module "ec2_instance" {
   name = "rocket-chat-server"
 
   ami           = "ami-053b0d53c279acc90" # Ubuntu 22.04
-  instance_type = "t3.small"
+  instance_type = "t3.micro"
   key_name      = "rocketchat" # Replace with your key pair name
 
   subnet_id              = aws_subnet.public.id
